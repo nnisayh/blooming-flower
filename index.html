@@ -472,13 +472,10 @@ function showStage(n){
 
 
 let rainStopped=false;
-let rainRunning=false;
 
 function rainEffect(){
 
-  if(rainStopped || rainRunning) return;
-
-  rainRunning = true;
+  if(rainStopped) return;
 
   const rainInterval=setInterval(()=>{
 
@@ -506,7 +503,6 @@ function rainEffect(){
 
   setTimeout(()=>{
     clearInterval(rainInterval);
-    rainRunning=false;
   },700);
 }
 
