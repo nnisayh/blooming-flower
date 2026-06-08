@@ -455,17 +455,25 @@ function showStage(n){
 
 
 let rainStopped=false;
+let rainRunning=false;
 
 function rainEffect(){
-if(rainStopped) return;
+
+  if(rainStopped || rainRunning) return;
+
+  rainRunning = true;
 
   const rainInterval=setInterval(()=>{
 
-    const drops=window.innerWidth<768?1:3; for(let i=0;i<drops;i++){
+    const drops=window.innerWidth<768?1:3;
+
+    for(let i=0;i<drops;i++){
 
       const drop=document.createElement('div');
       drop.className='rain';
-      const hearts=['❤️','💖','💕','💗','💞']; drop.textContent=hearts[Math.floor(Math.random()*hearts.length)];
+
+      const hearts=['❤️','💖','💕','💗','💞'];
+      drop.textContent=hearts[Math.floor(Math.random()*hearts.length)];
 
       drop.style.left=(window.innerWidth/2-90+Math.random()*180)+'px';
       drop.style.top='-20px';
@@ -479,7 +487,10 @@ if(rainStopped) return;
 
   },180);
 
-  setTimeout(()=>clearInterval(rainInterval),700);
+  setTimeout(()=>{
+    clearInterval(rainInterval);
+    rainRunning=false;
+  },700);
 }
 
 
