@@ -658,6 +658,12 @@ function resetAll(){
     bloomInterval=null;
   }
 
+  const music=document.getElementById('bgm');
+  if(music){
+    music.pause();
+    music.currentTime=0;
+  }
+
   stage=0;
   pts=0;
   rainStopped=false;
@@ -677,6 +683,10 @@ function resetAll(){
   resetBtn.classList.add('hidden');
 
   document.getElementById('finalMessage').classList.add('hidden');
+
+  document.getElementById('namePopup').classList.remove('hidden');
+  document.getElementById('mainScene').style.visibility='hidden';
+  document.getElementById('userName').value='';
 }
 
 showStage(0);
