@@ -27,7 +27,9 @@ body{
 .floats{position:fixed;inset:0;pointer-events:none;z-index:50}
 .fp{position:fixed;pointer-events:none;z-index:50;animation:floatUp linear forwards}
 @keyframes floatUp{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-260px) rotate(40deg);opacity:0}}
-.scene{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px}
+.scene{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;max-width:400px;
+opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.scene.show{opacity:1;transform:translateY(0)}
 
 /* Plant */
 .plant-wrap{width:min(70vw,280px);aspect-ratio:280/360;height:auto;position:relative}
@@ -406,7 +408,7 @@ to{transform:translateY(500px);opacity:0}
     </svg>
   </div>
 
-  <button class="love-btn" id="loveBtn" onclick="giveLove()">
+  <button class="love-btn" id="loveBtn">
     Beri Cinta
   </button>
 
@@ -434,6 +436,56 @@ to{transform:translateY(500px);opacity:0}
 </div>
 
 <script>
+
+let visitorName='Cinta';
+
+function startExperience(){
+  const v=document.getElementById('userName').value.trim();
+  if(v) visitorName=v;
+
+  document.getElementById('namePopup').classList.add('hidden');
+
+  const loading=document.getElementById('loadingScreen');
+  loading.classList.remove('hidden');
+  loading.classList.remove('fade-out');
+
+  setTimeout(()=>{
+    loading.classList.add('fade-out');
+
+    setTimeout(()=>{
+      loading.classList.add('hidden');
+
+      const scene=document.getElementById('mainScene');
+      scene.style.visibility='visible';
+      scene.classList.add('show');
+    },800);
+
+  },2500);
+}
+
+function showThanksPopup(){
+  const finalName=document.getElementById('finalName');
+  if(finalName){
+    finalName.textContent=visitorName;
+  }
+
+  document.getElementById('thanksPopup').classList.remove('hidden');
+
+  const music=document.getElementById('bgm');
+  if(music){
+    music.volume=0;
+    music.play().catch(()=>{});
+
+    let v=0;
+    const fade=setInterval(()=>{
+      v+=0.05;
+      music.volume=Math.min(v,0.5);
+      if(v>=0.5) clearInterval(fade);
+    },200);
+  }
+}
+
+
 // Stars
 const stEl=document.getElementById('stars');
 const starCount=window.innerWidth<768?50:100; for(let i=0;i<starCount;i++){
@@ -477,7 +529,7 @@ function rainEffect(){
 
   const rainInterval=setInterval(()=>{
 
-    const drops=window.innerWidth<768?1:3;
+    const drops=window.innerWidth<768?2:3;
 
     for(let i=0;i<drops;i++){
 
@@ -556,64 +608,6 @@ function loveExplosion(){
 }
 
 
-function showThanksPopup(){
- document.getElementById('thanksPopup').classList.remove('hidden');
- const music=document.getElementById('bgm');
- if(music){
-   music.volume=0;
-   music.play().catch(()=>{});
-   let v=0;
-   const fade=setInterval(()=>{
-     v+=0.05;
-     music.volume=Math.min(v,0.5);
-     if(v>=0.5) clearInterval(fade);
-   },200);
- }
-}
-
-
-let visitorName='Cinta';
-
-function startExperience(){
-  const v=document.getElementById('userName').value.trim();
-  if(v) visitorName=v;
-
-  document.getElementById('namePopup').classList.add('hidden');
-
-  const loading=document.getElementById('loadingScreen');
-
-  loading.classList.remove('hidden');
-  loading.classList.remove('fade-out');
-
-  setTimeout(()=>{
-    loading.classList.add('fade-out');
-
-    setTimeout(()=>{
-      loading.classList.add('hidden');
-      document.getElementById('mainScene').style.visibility='visible';
-    },800);
-
-  },2500);
-}
-
-function showThanksPopup(){
- document.getElementById('finalName').textContent=visitorName;
- document.getElementById('finalName2').textContent=visitorName;
- document.getElementById('thanksPopup').classList.remove('hidden');
-
- const music=document.getElementById('bgm');
- if(music){
-   music.volume=0;
-   music.play().catch(()=>{});
-   let v=0;
-   const fade=setInterval(()=>{
-      v+=0.05;
-      music.volume=Math.min(v,0.5);
-      if(v>=0.5) clearInterval(fade);
-   },200);
- }
-}
-
 function closePopup(){
 
  document.getElementById('thanksPopup').classList.add('hidden');
@@ -690,20 +684,21 @@ function resetAll(){
   loading.classList.remove('fade-out');
 
   document.getElementById('namePopup').classList.remove('hidden');
+  document.getElementById('mainScene').classList.remove('show');
   document.getElementById('mainScene').style.visibility='hidden';
   document.getElementById('userName').value='';
 }
 
 showStage(0);
 
-let lastTouchEnd=0;
-document.addEventListener('touchend',function(event){
-  const now=Date.now();
-  if(now-lastTouchEnd<=300){
-    event.preventDefault();
-  }
-  lastTouchEnd=now;
-},{passive:false});
+
+const loveBtn=document.getElementById('loveBtn');
+
+loveBtn.addEventListener('pointerdown',(e)=>{
+  e.preventDefault();
+  giveLove();
+});
+
 
 </script>
 
