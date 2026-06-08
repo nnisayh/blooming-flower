@@ -230,6 +230,18 @@ to{transform:translateY(500px);opacity:0}
   from{transform:rotate(0deg);}
   to{transform:rotate(360deg);}
 }
+
+#finalMessage{
+  width:100%;
+  margin-top:18px;
+  margin-bottom:8px;
+  text-align:center;
+  color:white;
+  font-size:1rem;
+  line-height:1.8;
+  opacity:.92;
+  font-weight:500;
+}
 </style>
 
 </head>
@@ -398,9 +410,14 @@ to{transform:translateY(500px);opacity:0}
     Beri Cinta
   </button>
 
-  <button class="love-btn hidden" id="resetBtn" style="display:none!important" onclick="resetAll()">
-    🔄 Ulangi
-  </button>
+  <p id="finalMessage" class="hidden">
+  Terima kasih <span id="thankName"></span>,<br>
+  bunga ini akhirnya mekar dengan indah.
+</p>
+
+<button class="love-btn hidden" id="resetBtn" style="display:none" onclick="resetAll()">
+    Ulangi
+</button>
 
 </div>
 
@@ -601,7 +618,17 @@ function showThanksPopup(){
 }
 
 function closePopup(){
+
  document.getElementById('thanksPopup').classList.add('hidden');
+
+ const resetBtn=document.getElementById('resetBtn');
+
+ resetBtn.classList.remove('hidden');
+ resetBtn.style.display='inline-flex';
+
+ document.getElementById('thankName').textContent = visitorName;
+
+ document.getElementById('finalMessage').classList.remove('hidden');
 }
 
 function giveLove(){
@@ -616,7 +643,7 @@ function giveLove(){
       rainStopped=true;
       document.querySelectorAll('.rain').forEach(el=>el.remove());
       const btn=document.getElementById('loveBtn');
-      btn.disabled=true;btn.innerHTML='Bunga Mekar';
+      btn.style.display='none';
       // sway
       document.getElementById('plantSvg').classList.add('bloom-float');
       // reset button removed
@@ -629,13 +656,31 @@ function giveLove(){
 }
 
 function resetAll(){
-  if(bloomInterval){clearInterval(bloomInterval);bloomInterval=null;}
-  stage=0;pts=0;
+
+  if(bloomInterval){
+    clearInterval(bloomInterval);
+    bloomInterval=null;
+  }
+
+  stage=0;
+  pts=0;
+  rainStopped=false;
+
   showStage(0);
-  document.getElementById('plantSvg').classList.remove('sway');
-  const btn=document.getElementById('loveBtn');
-  btn.disabled=false;btn.innerHTML='Beri Cinta';
-  // reset button removed
+
+  document.getElementById('plantSvg').classList.remove('bloom-float');
+  document.getElementById('thanksPopup').classList.add('hidden');
+
+  const loveBtn=document.getElementById('loveBtn');
+  loveBtn.style.display='inline-flex';
+  loveBtn.disabled=false;
+  loveBtn.innerHTML='Beri Cinta';
+
+  const resetBtn=document.getElementById('resetBtn');
+  resetBtn.style.display='none';
+  resetBtn.classList.add('hidden');
+
+  document.getElementById('finalMessage').classList.add('hidden');
 }
 
 showStage(0);
