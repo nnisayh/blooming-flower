@@ -423,9 +423,9 @@ to{transform:translateY(500px);opacity:0}
 
 <div id="thanksPopup" class="popup hidden">
   <div class="popup-card">
-    <h2>💌 </h2>
-    <p>
-      Ternyata, hal-hal yang indah nggak selalu langsung terlihat. 
+    <h2>💌 Hi <span id="finalName"></span>!!</h2>
+    <p style="text-align:justify; line-height:1.8;">
+      Ternyata, hal-hal yang indah nggak selalu langsung terlihat.
       Ada yang berawal dari sesuatu yang kecil, lalu perlahan hadir dengan caranya sendiri.
       Dan mungkin memang begitu adanya; beberapa hal hanya butuh waktu untuk sampai pada momen terbaiknya.
     </p>
@@ -581,15 +581,18 @@ function startExperience(){
   document.getElementById('namePopup').classList.add('hidden');
 
   const loading=document.getElementById('loadingScreen');
+
   loading.classList.remove('hidden');
+  loading.classList.remove('fade-out');
 
   setTimeout(()=>{
     loading.classList.add('fade-out');
 
-setTimeout(()=>{
-  loading.classList.add('hidden');
-  document.getElementById('mainScene').style.visibility='visible';
-},800);
+    setTimeout(()=>{
+      loading.classList.add('hidden');
+      document.getElementById('mainScene').style.visibility='visible';
+    },800);
+
   },2500);
 }
 
@@ -681,6 +684,10 @@ function resetAll(){
   resetBtn.classList.add('hidden');
 
   document.getElementById('finalMessage').classList.add('hidden');
+
+  const loading=document.getElementById('loadingScreen');
+  loading.classList.add('hidden');
+  loading.classList.remove('fade-out');
 
   document.getElementById('namePopup').classList.remove('hidden');
   document.getElementById('mainScene').style.visibility='hidden';
